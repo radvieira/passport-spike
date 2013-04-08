@@ -36,8 +36,8 @@ app.configure('development', function(){
 
 auth.configure(app, passport);
 
-app.get('/', routes.index);
-app.get('/welcome', routes.welcome);
+app.get(routes.ROOT_PATH, routes.index);
+app.get(routes.WELCOME_PATH, routes.welcome);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));

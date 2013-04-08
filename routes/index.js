@@ -11,3 +11,6 @@ exports.welcome = function(req, res) {
     console.log('welcoming');
     res.render('welcome', {username: req.user.username});
 }
+
+exports.ROOT_PATH = '/';
+exports.WELCOME_PATH = '/welcome';
