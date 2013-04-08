@@ -36,6 +36,7 @@ app.configure('development', function(){
 
 auth.configure(app, passport);
 
+app.all('*', auth.isAuthenticated);
 app.get(routes.ROOT_PATH, routes.index);
 app.get(routes.WELCOME_PATH, routes.welcome);
 
