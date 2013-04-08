@@ -9,7 +9,7 @@ var express = require('express')
   , path = require('path')
   , flash = require('connect-flash')
   , passport = require('passport')
-  , LocalStrategy = require('passport-local').Strategy;
+  , auth = require('./lib/configure-auth');
 
 var app = express();
 
@@ -34,41 +34,10 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
+auth.configure(app, passport);
+
 app.get('/', routes.index);
 app.get('/welcome', routes.welcome);
-
-var users = {
-    'rottenjohny': 'password'
-};
-
-passport.use(new LocalStrategy(
-    function(username, password, done) {
-        console.log('Authenticating');
-        var pwd = users[username];
-        if(!pwd) {
-            return done(null, false, { message: 'Incorrect username' });
-        }
-        if(password !== pwd) {
-            return done(null, false, { message: 'Incorrect password' });
-        }
-        return done(null, { username: username });
-    }
-));
-
-passport.serializeUser(function(user, done) {
-    console.log('serializing user');
-    done(null, user.username);
-});
-
-passport.deserializeUser(function(user, done) {
-    console.log('deserializing user');
-    done(null, { username: user });
-});
-
-app.post('/login', passport.authenticate('local', { successRedirect: '/welcome',
-                                                    failureRedirect: '/',
-                                                    failureFlash: true })
-);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
